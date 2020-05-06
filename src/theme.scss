@@ -17,3 +17,12 @@ $fitness-tracker-theme: mat-light-theme($fitness-tracker-primary, $fitness-track
 
   @include angular-material-theme($alternate-theme);
 }
+
+html, body {
+  font-family: 'Roboto', sans-serif;
+  height: 100%;
+}
+
+body {
+  margin: 0;
+}

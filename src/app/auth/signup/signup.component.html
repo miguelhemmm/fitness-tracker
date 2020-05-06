@@ -1,22 +1,44 @@
-<section>
-  <div class="container-fluid">
-  <form>
-    <div class="row">
-    <mat-form-field>
+<section class="signup-form mt-3">
+  <form fxLayout="column" fxLayoutAlign="center center" #signupForm="ngForm" (ngSubmit)="onSubmit(signupForm)">
+    <mat-form-field appearance="outline">
       <input
         type="email"
         matInput
-        placeholder="Your email">
+        placeholder="Your email"
+        ngModel
+        name="email"
+        required>
+        <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>
       </mat-form-field>
-    </div>
-    <div class="row">
-    <mat-form-field>
-      <input
-        type="password"
-        matInput
-        placeholder="Your password">
+      <mat-form-field appearance="outline">
+        <input
+          matInput
+          [type]="hide ? 'password' : 'text'"
+          placeholder="Your password"
+          ngModel
+          name="password"
+          required
+          minlength="8">
+          <mat-error align="start">Should be at least 8 characters long</mat-error>
+          <!-- <mat-error align="end">{{ pwInput.value?.length }} / 8</mat-error> -->
+          <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+    </button>
       </mat-form-field>
-    </div>
+      <mat-form-field appearance="outline" class="mt-2">
+          <input
+          matInput
+          placeholder="Your birthdate"
+          [matDatepicker]="picker"
+          [max]="maxDate"
+          [min]="minDate"
+          ngModel
+          name="birthdate"
+          required>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <mat-checkbox ngModel name="agree" color="primary" required>I agree to Terms and Conditions</mat-checkbox>
+      <button class="mt-2" type="submit" mat-raised-button color="primary" [disabled]="signupForm.invalid">Submit</button>
     </form>
-  </div>
 </section>

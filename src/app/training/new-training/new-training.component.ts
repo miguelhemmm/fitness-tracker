@@ -1,4 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { TrainingService } from '../training.service';
+import { Exercise } from '../exercise.model';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-new-training',
@@ -7,9 +12,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NewTrainingComponent implements OnInit {
 
-  constructor() { }
+exercises: Exercise[] = [];
+
+  constructor(private trainingService: TrainingService, private database: AngularFirestore) { }
 
   ngOnInit() {
+    this.trainingService.avaliableChanged.pipe(take(1)).subscribe((data: Exercise[]) => {
+     this.exercises = data;
+    });
+    this.trainingService.fetchAvailableExercises();
   }
-
+ onStartTraining(form: NgForm) {
+  this.trainingService.startExercise(form.value.pose);
+  }
 }

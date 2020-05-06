@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Validators, FormControl, NgForm, FormGroup } from '@angular/forms';
 import { AuthService } from '../auth.service';
+import { of } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -18,19 +20,20 @@ loginForm: FormGroup;
     this.loginForm = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required])
-
-    })
-
+    });
   }
 
     onSubmit() {
+    this.authService.errorChange.pipe(take(1)).subscribe(data => {
+    this.errorMessage = data;
+    });
     this.authService.login({
       email: this.loginForm.value.email,
       password: this.loginForm.value.password
     });
   }
 
-      getErrorMessage() {
+    getErrorMessage() {
     if (!this.loginForm.value.email) {
       return 'You must enter a value';
     } else {

@@ -25,6 +25,7 @@
     <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
     </button>
       </mat-form-field>
+        <span class="mb-2" *ngIf="errorMessage" [ngStyle]="{'color': '#D11D1F'}">{{ errorMessage }}</span>
       <button class="mt-2" type="submit" mat-raised-button color="primary" [disabled]="loginForm.invalid">Submit</button>
     </form>
 </section>

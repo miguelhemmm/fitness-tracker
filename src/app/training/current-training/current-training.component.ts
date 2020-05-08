@@ -21,7 +21,6 @@ selectedExercise: Exercise;
 
   ngOnInit() {
     this.selectedExercise = this.trainingService.getCurrentExercise();
-    console.log(this.selectedExercise);
     this.startResumeTimer();
   }
 

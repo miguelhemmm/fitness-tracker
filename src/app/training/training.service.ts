@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Exercise } from './exercise.model';
-import { Subject, Observable, Subscription } from 'rxjs';
+import { Subject, Observable, Subscription, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import * as moment from 'moment';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { MatSnackBar } from '@angular/material';
+import { UIServiceService } from '../shared/ui-service.service';
 
 @Injectable({
   providedIn: 'root'
@@ -21,9 +23,10 @@ private subs: Subscription[] = [];
 private currentExercise: Exercise;
 public poseChange = new Subject<Exercise>();
 
-  constructor(private database: AngularFirestore) { }
+  constructor(private database: AngularFirestore, private uiService: UIServiceService) { }
 
   fetchAvailableExercises() {
+    this.uiService.responseChange.next(true);
     this.subs.push(this.database
     .collection('availableExercises')
     .snapshotChanges().pipe(
@@ -38,10 +41,13 @@ public poseChange = new Subject<Exercise>();
       });
     }))
     .subscribe((data: Exercise[]) => {
+    this.uiService.responseChange.next(false);
     this.availableExercises = data;
     this.avaliableChanged.next([...this.availableExercises]);
     }, error => {
-      console.log(error);
+      this.uiService.responseChange.next(false);
+      this.uiService.showSnackBar('Fetching failed, please try again later', null, {duration: 500});
+      this.avaliableChanged.next(null);
     }));
 
   }

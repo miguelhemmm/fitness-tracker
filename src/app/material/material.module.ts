@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+
 import {
    MatButtonModule,
    MatToolbarModule,
@@ -24,6 +25,7 @@ import {
    MatProgressSpinnerModule,
    MatDialogModule,
    MatSortModule,
+   MatSnackBarModule
 } from '@angular/material';
 
 @NgModule({
@@ -52,6 +54,7 @@ import {
       MatProgressSpinnerModule,
       MatDialogModule,
       MatSortModule,
+      MatSnackBarModule
    ],
    exports: [
       MatButtonModule,
@@ -76,6 +79,7 @@ import {
       MatProgressSpinnerModule,
       MatDialogModule,
       MatSortModule,
+      MatSnackBarModule
    ],
    providers: [
       MatDatepickerModule,

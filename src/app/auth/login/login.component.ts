@@ -3,7 +3,9 @@ import { Validators, FormControl, NgForm, FormGroup } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { take } from 'rxjs/operators';
 import { UIServiceService } from 'src/app/shared/ui-service.service';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import * as fromApp from 'src/app/app.reducer';
 
 @Component({
   selector: 'app-login',
@@ -13,10 +15,14 @@ import { Subscription } from 'rxjs';
 export class LoginComponent implements OnInit, OnDestroy {
 
 hide = true;
-isLoading = false;
+isLoading: boolean;
 loadingSubscription: Subscription;
 loginForm: FormGroup;
-  constructor(private authService: AuthService, private uiService: UIServiceService) { }
+
+  constructor(
+    private authService: AuthService,
+    private uiService: UIServiceService,
+    private store$: Store<{ui: fromApp.State}>) { }
 
   ngOnInit() {
     this.loginForm = new FormGroup({
@@ -26,9 +32,7 @@ loginForm: FormGroup;
   }
 
     onSubmit() {
-    this.loadingSubscription = this.uiService.responseChange.subscribe(response => {
-    this.isLoading = response;
-    });
+    this.store$.select(fromApp.getisLoading).subscribe(isloading => this.isLoading = isloading);
     this.authService.login({
       email: this.loginForm.value.email,
       password: this.loginForm.value.password

@@ -8,6 +8,8 @@ import { StopTrainingComponent } from './current-training/stop-training-dialog.c
 import { MaterialModule } from '../material/material.module';
 import { SharedModule } from '../shared/shared.module';
 import { TrainingRoutingModule } from './training-routing.module';
+import { StoreModule } from '@ngrx/store';
+import { trainingReducer } from '../training/training.reducer';
 
 
 
@@ -22,7 +24,8 @@ import { TrainingRoutingModule } from './training-routing.module';
   imports: [
     MaterialModule,
     SharedModule,
-    TrainingRoutingModule
+    TrainingRoutingModule,
+    StoreModule.forFeature('training', trainingReducer)
   ],
   exports: [],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

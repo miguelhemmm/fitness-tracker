@@ -6,27 +6,30 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { take } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { UIServiceService } from 'src/app/shared/ui-service.service';
+import * as fromTraining from 'src/app/training/training.reducer';
+import * as fromApp from 'src/app/app.reducer';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-new-training',
   templateUrl: './new-training.component.html',
   styleUrls: ['./new-training.component.scss']
 })
-export class NewTrainingComponent implements OnInit, OnDestroy {
+export class NewTrainingComponent implements OnInit{
 
 exercises: Exercise[];
-isLoading = true;
-loadingSubscription: Subscription;
-trainingSubscription: Subscription;
+isLoading: boolean;
 
-  constructor(private trainingService: TrainingService, private database: AngularFirestore, private uiService: UIServiceService) { }
+  constructor(
+    private trainingService: TrainingService,
+    private database: AngularFirestore,
+    private uiService: UIServiceService,
+    private store$: Store<fromTraining.State>) { }
 
   ngOnInit() {
-    this.loadingSubscription = this.uiService.responseChange.pipe().subscribe(response => {
-    this.isLoading = response;
-    });
-    this.trainingService.avaliableChanged.pipe().subscribe((data: Exercise[]) => {
-     this.exercises = data;
+    this.store$.select(fromApp.getisLoading).subscribe(isloading => this.isLoading = isloading);
+    this.store$.select(fromTraining.getAvailableExercises).subscribe((data: Exercise[]) => {
+    this.exercises = data;
     });
     this.fetchAgain();
   }
@@ -38,8 +41,4 @@ trainingSubscription: Subscription;
     this.trainingService.fetchAvailableExercises();
   }
 
-  ngOnDestroy() {
-    this.loadingSubscription ? this.loadingSubscription.unsubscribe() : '';
-    this.trainingSubscription ? this.trainingSubscription.unsubscribe() : '';
-  }
 }

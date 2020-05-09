@@ -3,6 +3,8 @@ import { Exercise } from '../exercise.model';
 import { TrainingService } from '../training.service';
 import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 import { take } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
+import * as fromTraining from '../training.reducer';
 
 @Component({
   selector: 'app-past-trainings',
@@ -17,13 +19,13 @@ export class PastTrainingsComponent implements OnInit, AfterViewInit {
 displayedColumns: string[] = ['name', 'duration', 'calories', 'date', 'state'];
 dataSource = new MatTableDataSource<Exercise>();
 
-  constructor(private trainingService: TrainingService) { }
+  constructor(private trainingService: TrainingService, private store$: Store<fromTraining.State>) { }
 
   ngOnInit() {
-    this.trainingService.finishedChanged.pipe(take(1)).subscribe((data: Exercise[]) => {
-      this.dataSource.data = data;
-    });
-    this.trainingService.fetchCompletedOrCancelled();
+  this.store$.select(fromTraining.getFinishedExercises).subscribe((exercises: Exercise[]) => {
+    this.dataSource.data = exercises;
+  });
+  this.trainingService.fetchCompletedOrCancelled();
   }
 
   ngAfterViewInit() {

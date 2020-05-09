@@ -5,6 +5,8 @@ import { TrainingService } from '../training.service';
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Exercise } from '../exercise.model';
+import { Store } from '@ngrx/store';
+import * as fromTraining from 'src/app/training/training.reducer';
 
 @Component({
   selector: 'app-current-training',
@@ -17,10 +19,12 @@ progress = 0;
 timer;
 selectedExercise: Exercise;
 
-  constructor(private dialog: MatDialog, private trainingService: TrainingService) { }
+  constructor(private dialog: MatDialog, private trainingService: TrainingService, private store$: Store<fromTraining.State>) { }
 
   ngOnInit() {
-    this.selectedExercise = this.trainingService.getCurrentExercise();
+    this.store$.select(fromTraining.getActiveTraining).pipe(take(1)).subscribe(availableTraining => {
+      this.selectedExercise = availableTraining;
+    })
     this.startResumeTimer();
   }
 

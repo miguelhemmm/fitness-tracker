@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/fitness-tracker",
+            "outputPath": "docs/fitness-tracker",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -60,7 +60,10 @@
                   "maximumWarning": "6kb",
                   "maximumError": "10kb"
                 }
-              ]
+              ],
+                "baseHref": "/",
+                "deployUrl": "https://miguelhemm.github.io/fitness-tracker"
+
             }
           }
         },
